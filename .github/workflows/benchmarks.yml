@@ -1,0 +1,53 @@
+name: Nightly Benchmarks
+
+on:
+  schedule:
+    - cron: '0 2 * * *'  # daily at 02:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  run-benchmarks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake
+          python -m pip install -U pip numpy matplotlib
+
+      - name: Configure C++ (Release)
+        run: |
+          cmake -S . -B build -DBUILD_BENCHMARKS=ON -DBUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build benchmarks
+        run: |
+          cmake --build build --config Release -j
+
+      - name: Run harness and save CSV
+        run: |
+          python scripts/run_benchmarks.py --build-dir build --csv benchmark_results.csv --plot benchmark_results.png
+
+      - name: Prepare gh-pages data
+        run: |
+          mkdir -p gh-pages-data
+          TS=$(date -u +"%Y%m%d-%H%M%S")
+          cp benchmark_results.csv gh-pages-data/results-$TS.csv
+          cp benchmark_results.png gh-pages-data/results-$TS.png
+
+      - name: Push to gh-pages branch
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: gh-pages-data
+          clean: false
+          target-folder: data/benchmarks

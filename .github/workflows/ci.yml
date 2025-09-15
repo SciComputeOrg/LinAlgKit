@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-test:
+    name: C++ build and tests (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          python -m pip install -U pip cmake
+      - name: Configure
+        run: |
+          cmake -S . -B build -DBUILD_TESTS=ON -DBUILD_BENCHMARKS=OFF
+      - name: Build
+        run: |
+          cmake --build build --config Release -j
+      - name: Run tests
+        run: |
+          ctest --test-dir build --output-on-failure -C Release
+
+  python-smoke:
+    name: Python import smoke (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install build tooling
+        run: |
+          python -m pip install -U pip
+          python -m pip install scikit-build-core pybind11 numpy build
+      - name: Build wheel locally
+        run: |
+          python -m build
+      - name: Install wheel
+        run: |
+          pip install dist/*.whl
+      - name: Smoke test
+        shell: bash
+        run: |
+          python - <<'PY'
+          import LinAlgKit as lk
+          m = lk.Matrix(2,2,1.0)
+          print('OK', m.to_numpy().shape)
+          PY

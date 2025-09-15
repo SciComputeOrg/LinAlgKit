@@ -1,0 +1,117 @@
+name: Build and Publish Wheels
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  build_wheels:
+    name: Build wheels (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install build tooling
+        run: |
+          python -m pip install -U pip
+          python -m pip install cibuildwheel==2.20.0 numpy
+
+      - name: Build wheels with cibuildwheel
+        env:
+          CIBW_BUILD: cp38-* cp39-* cp310-* cp311-* cp312-* cp313-*
+          CIBW_SKIP: pp* *-musllinux_*  # skip pypy and musl for now
+          CIBW_ARCHS_LINUX: x86_64
+          CIBW_ARCHS_MACOS: x86_64 arm64
+          CIBW_ARCHS_WINDOWS: AMD64
+          CIBW_BEFORE_BUILD: |
+            python -m pip install -U pip
+            python -m pip install scikit-build-core pybind11 cmake
+          CIBW_ENVIRONMENT: |
+            SKBUILD_CONFIGURE_ARGS="-DPYTHON_EXECUTABLE={python_executable}"
+        run: |
+          python -m cibuildwheel --output-dir wheelhouse
+
+      - name: Upload wheel artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheelhouse-${{ runner.os }}
+          path: wheelhouse/*
+
+  build_sdist:
+    name: Build sdist (source)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Build sdist
+        run: |
+          python -m pip install -U pip build
+          python -m build --sdist
+      - name: Upload sdist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sdist
+          path: dist/*
+
+  publish:
+    name: Publish to PyPI / TestPyPI
+    needs: [build_wheels, build_sdist]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Download wheel artifacts (Linux)
+        uses: actions/download-artifact@v4
+        with:
+          name: wheelhouse-Linux
+          path: dist/
+      - name: Download wheel artifacts (macOS)
+        uses: actions/download-artifact@v4
+        with:
+          name: wheelhouse-macOS
+          path: dist/
+      - name: Download wheel artifacts (Windows)
+        uses: actions/download-artifact@v4
+        with:
+          name: wheelhouse-Windows
+          path: dist/
+      - name: Download sdist
+        uses: actions/download-artifact@v4
+        with:
+          name: sdist
+          path: dist/
+
+      - name: Determine repository (PyPI vs TestPyPI)
+        id: repo
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          if echo "$TAG" | grep -qiE 'rc|a|b|dev'; then
+            echo "repo_url=https://test.pypi.org/legacy/" >> $GITHUB_OUTPUT
+            echo "target_repo=TestPyPI" >> $GITHUB_OUTPUT
+          else
+            echo "repo_url=https://upload.pypi.org/legacy/" >> $GITHUB_OUTPUT
+            echo "target_repo=PyPI" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Publish to repository
+        uses: pypa/gh-action-pypi-publish@v1.10.3
+        with:
+          repository-url: ${{ steps.repo.outputs.repo_url }}
+          password: ${{ steps.repo.outputs.target_repo == 'PyPI' && secrets.PYPI_API_TOKEN || secrets.TEST_PYPI_API_TOKEN }}
+          skip-existing: true

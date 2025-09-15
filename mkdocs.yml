@@ -1,0 +1,30 @@
+site_name: LinAlgKit Docs
+site_description: Documentation for the LinAlgKit C++/Python linear algebra toolkit
+repo_url: https://github.com/SciComputeOrg/LinAlgKit
+repo_name: SciComputeOrg/LinAlgKit
+site_url: https://SciComputeOrg.github.io/LinAlgKit/
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - content.code.copy
+
+nav:
+  - Home: docs/index.md
+  - Python Usage: README.md
+  - Tutorial: docs/tutorial.md
+  - API Reference: docs/api.md
+  - C++ API: docs/index.md#c-api-overview
+  - Performance: docs/performance.md
+  - Benchmarks: docs/index.md#benchmarks
+  - Releasing: docs/releasing.md
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - footnotes
+  - tables
+  - toc:
+      permalink: true

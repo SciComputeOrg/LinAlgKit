@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.15)
 
 # Project name and version
 project(MatrixLib VERSION 1.0.0 LANGUAGES CXX)

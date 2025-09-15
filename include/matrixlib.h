@@ -23,9 +23,37 @@ class Matrix {
     static_assert(std::is_arithmetic<T>::value, "Matrix can only be instantiated with arithmetic types");
 
 private:
-    std::vector<std::vector<T>> data;
+    // Contiguous row-major storage: element (i,j) at data[i*cols + j]
+    std::vector<T> data;
     size_t rows;
     size_t cols;
+
+    inline size_t index(size_t i, size_t j) const {
+        if (i >= rows || j >= cols) throw std::out_of_range("index out of range");
+        return i * cols + j;
+    }
+
+    // Row proxy for matrix[i][j] access
+    struct RowProxy {
+        T* base;
+        size_t cols;
+        T& operator[](size_t j) {
+            if (j >= cols) throw std::out_of_range("column index out of range");
+            return base[j];
+        }
+        const T& operator[](size_t j) const {
+            if (j >= cols) throw std::out_of_range("column index out of range");
+            return base[j];
+        }
+    };
+    struct ConstRowProxy {
+        const T* base;
+        size_t cols;
+        const T& operator[](size_t j) const {
+            if (j >= cols) throw std::out_of_range("column index out of range");
+            return base[j];
+        }
+    };
 
 public:
     // Constructors
@@ -53,9 +81,19 @@ public:
     Matrix& operator=(const Matrix& other) = default;
     Matrix& operator=(Matrix&& other) noexcept;
     
-    // Access operators
-    std::vector<T>& operator[](size_t index);
-    const std::vector<T>& operator[](size_t index) const;
+    // Access operators (row proxy)
+    RowProxy operator[](size_t i) {
+        if (i >= rows) throw std::out_of_range("row index out of range");
+        return RowProxy{ data.data() + i * cols, cols };
+    }
+    ConstRowProxy operator[](size_t i) const {
+        if (i >= rows) throw std::out_of_range("row index out of range");
+        return ConstRowProxy{ data.data() + i * cols, cols };
+    }
+
+    // Direct element access helper
+    T& at(size_t i, size_t j) { return data[index(i, j)]; }
+    const T& at(size_t i, size_t j) const { return data[index(i, j)]; }
     
     // Matrix operations
     Matrix operator+(const Matrix& other) const;
@@ -80,6 +118,9 @@ public:
     T determinant() const;
     // Naive recursive determinant (Laplace expansion), for testing/small n
     T determinant_naive() const;
+    // Solve Ax = b using LUP decomposition
+    std::vector<T> solve(const std::vector<T>& b) const;
+    // Inverse using LUP decomposition
     Matrix inverse() const;
     
     // Utility functions
@@ -99,6 +140,11 @@ public:
     
     template <typename U>
     friend std::istream& operator>>(std::istream& is, Matrix<U>& matrix);
+
+private:
+    // LUP decomposition with partial pivoting: A = L*U with permutation P encoded by piv
+    // Returns false if singular
+    bool lup_decompose(Matrix& L, Matrix& U, std::vector<size_t>& piv, T& parity) const;
 };
 
 // Non-member operator overloads

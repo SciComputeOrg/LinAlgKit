@@ -1,19 +1,24 @@
 """
-LinAlgKit Python package
+LinAlgKit — fast C++ backend for Python via pybind11.
 
-This package provides Python bindings for the C++ matrix library via pybind11.
-
-Classes:
-- Matrix (double)
-- MatrixF (float)
-- MatrixI (int)
+This package requires the compiled extension. Prebuilt wheels are provided for
+common platforms. If the extension is missing, installation must build from
+source (requires a C++17 compiler and CMake).
 """
 
-# The compiled extension is named `matrixlib_py` and is built into this package
 try:
     from .matrixlib_py import Matrix, MatrixF, MatrixI  # type: ignore
 except Exception as e:
     raise ImportError(
-        "Failed to import compiled extension 'matrixlib_py'. "
-        "Make sure the package is built (e.g., `pip install -e .`)."
+        "LinAlgKit requires the compiled C++ extension 'matrixlib_py'. "
+        "Install prebuilt wheels from PyPI or ensure a C++17 compiler and CMake are available to build from source."
     ) from e
+
+BACKEND = "compiled"
+
+__all__ = [
+    "Matrix",
+    "MatrixF",
+    "MatrixI",
+    "BACKEND",
+]

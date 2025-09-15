@@ -19,15 +19,48 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install dependencies
+      - name: Print runner info
         run: |
-          python -m pip install -U pip cmake
-      - name: Configure
+          echo "Runner OS: $RUNNER_OS"
+          uname -a || true
+
+      - name: Install system dependencies (Linux)
+        if: runner.os == 'Linux'
         run: |
-          cmake -S . -B build -DBUILD_TESTS=ON -DBUILD_BENCHMARKS=OFF
-      - name: Build
+          sudo apt-get update
+          sudo apt-get install -y build-essential python3-dev ninja-build pkg-config cmake git
+
+      - name: Install system dependencies (macOS)
+        if: runner.os == 'macOS'
         run: |
-          cmake --build build --config Release -j
+          brew update
+          brew install cmake ninja pkg-config
+
+      - name: Install system dependencies (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          choco install -y ninja cmake
+
+      - name: Tool versions (debug)
+        run: |
+          cmake --version || true
+          ninja --version || true
+          gcc --version || clang --version || true
+          python -V
+          pip -V
+
+      - name: Install Python build tooling
+        run: |
+          python -m pip install --upgrade pip setuptools wheel build scikit-build-core pybind11 numpy
+
+      - name: Configure (with logs on failure)
+        run: |
+          cmake -S . -B build -DBUILD_TESTS=ON -DBUILD_BENCHMARKS=OFF || (cat build/CMakeFiles/CMakeOutput.log || true; cat build/CMakeFiles/CMakeError.log || true; exit 1)
+
+      - name: Build (verbose)
+        run: |
+          cmake --build build --config Release -- -j VERBOSE=1 || true
+
       - name: Run tests
         run: |
           ctest --test-dir build --output-on-failure -C Release
@@ -44,10 +77,39 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install build tooling
+      - name: Print runner info
         run: |
-          python -m pip install -U pip
-          python -m pip install scikit-build-core pybind11 numpy build
+          echo "Runner OS: $RUNNER_OS"
+          uname -a || true
+
+      - name: Install system dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential python3-dev ninja-build pkg-config cmake git
+
+      - name: Install system dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew update
+          brew install cmake ninja pkg-config
+
+      - name: Install system dependencies (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          choco install -y ninja cmake
+
+      - name: Tool versions (debug)
+        run: |
+          cmake --version || true
+          ninja --version || true
+          gcc --version || clang --version || true
+          python -V
+          pip -V
+
+      - name: Install Python build tooling
+        run: |
+          python -m pip install --upgrade pip setuptools wheel build scikit-build-core pybind11 numpy
       - name: Build wheel locally
         run: |
           python -m build

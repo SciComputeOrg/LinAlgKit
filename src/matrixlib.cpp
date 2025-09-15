@@ -6,7 +6,7 @@ namespace matrixlib {
 
 template <typename T>
 Matrix<T>::Matrix(size_t rows, size_t cols, const T& value)
-    : rows(rows), cols(cols), data(rows, std::vector<T>(cols, value)) {}
+    : rows(rows), cols(cols), data(rows * cols, value) {}
 
 template <typename T>
 Matrix<T>::Matrix(std::initializer_list<std::initializer_list<T>> init) {
@@ -15,15 +15,19 @@ Matrix<T>::Matrix(std::initializer_list<std::initializer_list<T>> init) {
         cols = 0;
         return;
     }
-    
     cols = init.begin()->size();
-    data.reserve(rows);
-    
+    data.assign(rows * cols, T());
+    size_t i = 0;
     for (const auto& row : init) {
         if (row.size() != cols) {
             throw std::invalid_argument("All rows must have the same number of columns");
         }
-        data.emplace_back(row);
+        size_t j = 0;
+        for (const auto& v : row) {
+            at(i, j) = v;
+            ++j;
+        }
+        ++i;
     }
 }
 
@@ -46,32 +50,17 @@ Matrix<T>& Matrix<T>::operator=(Matrix&& other) noexcept {
     return *this;
 }
 
-template <typename T>
-std::vector<T>& Matrix<T>::operator[](size_t index) {
-    if (index >= rows) {
-        throw std::out_of_range("Row index out of range");
-    }
-    return data[index];
-}
-
-template <typename T>
-const std::vector<T>& Matrix<T>::operator[](size_t index) const {
-    if (index >= rows) {
-        throw std::out_of_range("Row index out of range");
-    }
-    return data[index];
-}
+// operator[] implemented via RowProxy in header for contiguous layout
 
 template <typename T>
 Matrix<T> Matrix<T>::operator+(const Matrix& other) const {
     if (rows != other.rows || cols != other.cols) {
         throw std::invalid_argument("Matrix dimensions must match for addition");
     }
-    
     Matrix result(rows, cols);
     for (size_t i = 0; i < rows; ++i) {
         for (size_t j = 0; j < cols; ++j) {
-            result[i][j] = data[i][j] + other.data[i][j];
+            result.at(i,j) = at(i,j) + other.at(i,j);
         }
     }
     return result;
@@ -82,11 +71,10 @@ Matrix<T> Matrix<T>::operator-(const Matrix& other) const {
     if (rows != other.rows || cols != other.cols) {
         throw std::invalid_argument("Matrix dimensions must match for subtraction");
     }
-    
     Matrix result(rows, cols);
     for (size_t i = 0; i < rows; ++i) {
         for (size_t j = 0; j < cols; ++j) {
-            result[i][j] = data[i][j] - other.data[i][j];
+            result.at(i,j) = at(i,j) - other.at(i,j);
         }
     }
     return result;
@@ -102,9 +90,11 @@ Matrix<T> Matrix<T>::operator*(const Matrix& other) const {
     Matrix result(rows, other.cols, 0);
     for (size_t i = 0; i < rows; ++i) {
         for (size_t k = 0; k < other.cols; ++k) {
+            T sum = 0;
             for (size_t j = 0; j < cols; ++j) {
-                result[i][k] += data[i][j] * other.data[j][k];
+                sum += at(i,j) * other.at(j,k);
             }
+            result.at(i,k) = sum;
         }
     }
     return result;
@@ -115,7 +105,7 @@ Matrix<T> Matrix<T>::operator*(const T& scalar) const {
     Matrix result(rows, cols);
     for (size_t i = 0; i < rows; ++i) {
         for (size_t j = 0; j < cols; ++j) {
-            result[i][j] = data[i][j] * scalar;
+            result.at(i,j) = at(i,j) * scalar;
         }
     }
     return result;
@@ -171,7 +161,7 @@ Matrix<T> Matrix<T>::transpose() const {
     Matrix result(cols, rows);
     for (size_t i = 0; i < rows; ++i) {
         for (size_t j = 0; j < cols; ++j) {
-            result[j][i] = data[i][j];
+            result.at(j,i) = at(i,j);
         }
     }
     return result;
@@ -185,7 +175,7 @@ T Matrix<T>::trace() const {
     
     T result = 0;
     for (size_t i = 0; i < rows; ++i) {
-        result += data[i][i];
+        result += at(i,i);
     }
     return result;
 }
@@ -197,11 +187,11 @@ T Matrix<T>::determinant() const {
     }
     
     if (rows == 1) {
-        return data[0][0];
+        return at(0,0);
     }
     
     if (rows == 2) {
-        return data[0][0] * data[1][1] - data[0][1] * data[1][0];
+        return at(0,0) * at(1,1) - at(0,1) * at(1,0);
     }
     // Bareiss algorithm (fraction-free Gaussian elimination)
     // Works well for integer matrices (avoids fraction growth) and is O(n^3).
@@ -210,7 +200,7 @@ T Matrix<T>::determinant() const {
     std::vector<std::vector<long double>> a(n, std::vector<long double>(n));
     for (size_t i = 0; i < n; ++i)
         for (size_t j = 0; j < n; ++j)
-            a[i][j] = static_cast<long double>(data[i][j]);
+            a[i][j] = static_cast<long double>(at(i,j));
 
     long double prev_pivot = 1.0L;
     long double det_ld = 1.0L;
@@ -263,14 +253,14 @@ T Matrix<T>::determinant_naive() const {
         for (size_t i = 1; i < rows; ++i) {
             for (size_t k = 0; k < cols; ++k) {
                 if (k < j) {
-                    submatrix[i - 1][k] = data[i][k];
+                    submatrix.at(i - 1, k) = at(i, k);
                 } else if (k > j) {
-                    submatrix[i - 1][k - 1] = data[i][k];
+                    submatrix.at(i - 1, k - 1) = at(i, k);
                 }
             }
         }
         T sign = (j % 2 == 0) ? 1 : -1;
-        det += sign * data[0][j] * submatrix.determinant_naive();
+        det += sign * at(0, j) * submatrix.determinant_naive();
     }
     return det;
 }
@@ -280,33 +270,134 @@ Matrix<T> Matrix<T>::inverse() const {
     if (!isSquare()) {
         throw std::logic_error("Inverse is only defined for square matrices");
     }
-    
-    T det = determinant();
-    if (det == 0) {
-        throw std::logic_error("Matrix is not invertible (determinant is zero)");
+
+    // LUP decomposition
+    Matrix L(rows, cols, 0), U(rows, cols, 0);
+    std::vector<size_t> piv(rows);
+    T parity = 1;
+    if (!lup_decompose(L, U, piv, parity)) {
+        throw std::logic_error("Matrix is singular and not invertible");
     }
-    
-    // For simplicity, we'll just implement for 2x2 matrices
-    if (rows == 2) {
-        Matrix result(2, 2);
-        T invDet = 1 / det;
-        result[0][0] = data[1][1] * invDet;
-        result[0][1] = -data[0][1] * invDet;
-        result[1][0] = -data[1][0] * invDet;
-        result[1][1] = data[0][0] * invDet;
-        return result;
+
+    // Compute inverse by solving A x_i = e_i for each basis vector e_i
+    Matrix inv(rows, cols, 0);
+    for (size_t col = 0; col < cols; ++col) {
+        std::vector<T> e(rows, 0);
+        e[col] = 1;
+
+        // Permute RHS according to piv: Pb
+        std::vector<T> Pb(rows);
+        for (size_t i = 0; i < rows; ++i) Pb[i] = e[piv[i]];
+
+        // Forward substitution Ly = Pb (L unit lower)
+        std::vector<T> y(rows, 0);
+        for (size_t i = 0; i < rows; ++i) {
+            T sum = Pb[i];
+            for (size_t j = 0; j < i; ++j) sum -= L.at(i,j) * y[j];
+            y[i] = sum; // L has 1s on diagonal
+        }
+
+        // Backward substitution Ux = y
+        std::vector<T> x(rows, 0);
+        for (int i = int(rows) - 1; i >= 0; --i) {
+            T sum = y[size_t(i)];
+            for (size_t j = size_t(i) + 1; j < cols; ++j) sum -= U.at(size_t(i), j) * x[j];
+            T diag = U.at(size_t(i), size_t(i));
+            if (diag == 0) throw std::logic_error("Singular matrix in back substitution");
+            x[size_t(i)] = sum / diag;
+        }
+
+        // Set column of inverse
+        for (size_t i = 0; i < rows; ++i) inv.at(i, col) = x[i];
     }
-    
-    // For larger matrices, we would implement the adjugate method here
-    // For now, we'll throw an exception
-    throw std::runtime_error("Inverse is only implemented for 2x2 matrices in this version");
+
+    return inv;
+}
+
+template <typename T>
+std::vector<T> Matrix<T>::solve(const std::vector<T>& b) const {
+    if (rows != b.size()) {
+        throw std::invalid_argument("Dimension mismatch in solve: b size must equal number of rows");
+    }
+    Matrix L(rows, cols, 0), U(rows, cols, 0);
+    std::vector<size_t> piv(rows);
+    T parity = 1;
+    if (!lup_decompose(L, U, piv, parity)) {
+        throw std::logic_error("Matrix is singular");
+    }
+
+    // Permute RHS: Pb
+    std::vector<T> Pb(rows);
+    for (size_t i = 0; i < rows; ++i) Pb[i] = b[piv[i]];
+
+    // Forward substitution Ly = Pb
+    std::vector<T> y(rows, 0);
+    for (size_t i = 0; i < rows; ++i) {
+        T sum = Pb[i];
+        for (size_t j = 0; j < i; ++j) sum -= L.at(i,j) * y[j];
+        y[i] = sum;
+    }
+
+    // Back substitution Ux = y
+    std::vector<T> x(rows, 0);
+    for (int i = int(rows) - 1; i >= 0; --i) {
+        T sum = y[size_t(i)];
+        for (size_t j = size_t(i) + 1; j < cols; ++j) sum -= U.at(size_t(i), j) * x[j];
+        T diag = U.at(size_t(i), size_t(i));
+        if (diag == 0) throw std::logic_error("Singular matrix in back substitution");
+        x[size_t(i)] = sum / diag;
+    }
+    return x;
+}
+
+template <typename T>
+bool Matrix<T>::lup_decompose(Matrix& L, Matrix& U, std::vector<size_t>& piv, T& parity) const {
+    if (!isSquare()) return false;
+    const size_t n = rows;
+    // Initialize U as a copy of *this, L as identity, piv as 0..n-1
+    U = *this;
+    L = Matrix::identity(n);
+    piv.resize(n);
+    std::iota(piv.begin(), piv.end(), 0);
+    parity = 1;
+
+    for (size_t k = 0; k < n; ++k) {
+        // Pivot selection
+        size_t pivot = k;
+        T maxval = std::abs(U.at(k,k));
+        for (size_t i = k + 1; i < n; ++i) {
+            T v = std::abs(U.at(i,k));
+            if (v > maxval) { maxval = v; pivot = i; }
+        }
+        if (maxval == T(0)) return false; // singular
+
+        if (pivot != k) {
+            // Swap rows in U
+            for (size_t j = 0; j < n; ++j) std::swap(U.at(k,j), U.at(pivot,j));
+            // Swap rows in L (columns < k)
+            for (size_t j = 0; j < k; ++j) std::swap(L.at(k,j), L.at(pivot,j));
+            std::swap(piv[k], piv[pivot]);
+            parity = -parity;
+        }
+
+        // Eliminate below pivot
+        for (size_t i = k + 1; i < n; ++i) {
+            T factor = U.at(i,k) / U.at(k,k);
+            L.at(i,k) = factor;
+            U.at(i,k) = 0;
+            for (size_t j = k + 1; j < n; ++j) {
+                U.at(i,j) -= factor * U.at(k,j);
+            }
+        }
+    }
+    return true;
 }
 
 template <typename T>
 Matrix<T> Matrix<T>::identity(size_t size) {
     Matrix result(size, size, 0);
     for (size_t i = 0; i < size; ++i) {
-        result[i][i] = 1;
+        result.at(i,i) = 1;
     }
     return result;
 }
@@ -331,7 +422,7 @@ template <typename T>
 std::ostream& operator<<(std::ostream& os, const Matrix<T>& matrix) {
     for (size_t i = 0; i < matrix.rows; ++i) {
         for (size_t j = 0; j < matrix.cols; ++j) {
-            os << matrix.data[i][j];
+            os << matrix.at(i,j);
             if (j < matrix.cols - 1) {
                 os << " ";
             }
@@ -347,7 +438,7 @@ template <typename T>
 std::istream& operator>>(std::istream& is, Matrix<T>& matrix) {
     for (size_t i = 0; i < matrix.rows; ++i) {
         for (size_t j = 0; j < matrix.cols; ++j) {
-            is >> matrix.data[i][j];
+            is >> const_cast<Matrix<T>&>(matrix).at(i,j);
         }
     }
     return is;

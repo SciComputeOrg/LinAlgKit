@@ -53,9 +53,21 @@ jobs:
         run: |
           python -m pip install --upgrade pip setuptools wheel build scikit-build-core pybind11 numpy
 
-      - name: Configure (with logs on failure)
+      - name: Configure (Linux/macOS)
+        if: runner.os != 'Windows'
         run: |
           cmake -S . -B build -DBUILD_TESTS=ON -DBUILD_BENCHMARKS=OFF || (cat build/CMakeFiles/CMakeOutput.log || true; cat build/CMakeFiles/CMakeError.log || true; exit 1)
+
+      - name: Configure (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          cmake -S . -B build -DBUILD_TESTS=ON -DBUILD_BENCHMARKS=OFF
+          if ($LASTEXITCODE -ne 0) {
+            if (Test-Path build/CMakeFiles/CMakeOutput.log) { Get-Content build/CMakeFiles/CMakeOutput.log -Raw | Write-Host }
+            if (Test-Path build/CMakeFiles/CMakeError.log) { Get-Content build/CMakeFiles/CMakeError.log -Raw | Write-Host }
+            exit 1
+          }
 
       - name: Build (verbose)
         run: |

@@ -15,9 +15,9 @@ nav:
   - Home: index.md
   - Python Usage: tutorial.md
   - API Reference: api.md
-  - C++ API: index.md#c-api-overview
+  - C++ API: index.md
   - Performance: performance.md
-  - Benchmarks: index.md#benchmarks
+  - Benchmarks: index.md
   - Releasing: releasing.md
 
 markdown_extensions:

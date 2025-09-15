@@ -90,8 +90,8 @@ if(BUILD_TESTS)
             GTest::gtest_main
     )
     
-    # Add test
-    add_test(NAME matrix_tests COMMAND matrix_tests)
+    # Add test (use resolved path for robustness)
+    add_test(NAME matrix_tests COMMAND $<TARGET_FILE:matrix_tests>)
     
     set_target_properties(matrix_tests PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/tests

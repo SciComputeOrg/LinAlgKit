@@ -1,0 +1,32 @@
+[build-system]
+requires = [
+  "scikit-build-core>=0.9",
+  "pybind11>=2.11",
+  "setuptools_scm>=8",
+]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "LinAlgKit"
+version = "0.1.0"
+description = "A C++/Python linear algebra toolkit with pybind11 bindings"
+readme = "README.md"
+authors = [{ name = "LinAlgKit Developers" }]
+license = { file = "LICENSE" }
+requires-python = ">=3.8"
+dependencies = [
+  "numpy>=1.22",
+]
+
+[project.urls]
+Homepage = "https://github.com/your-org/LinAlgKit"
+Repository = "https://github.com/your-org/LinAlgKit"
+
+[tool.scikit-build]
+wheel.packages = ["python_pkg/LinAlgKit"]
+cmake.verbose = false
+cmake.build-type = "Release"
+
+[tool.scikit-build.cmake]
+# Pass the Python executable to CMake
+args = ["-DPYTHON_EXECUTABLE:FILEPATH={python.executable}"]

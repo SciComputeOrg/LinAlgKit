@@ -19,14 +19,12 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/your-org/LinAlgKit"
-Repository = "https://github.com/your-org/LinAlgKit"
+Homepage = "https://github.com/SciComputeOrg/LinAlgKit"
+Repository = "https://github.com/SciComputeOrg/LinAlgKit"
 
 [tool.scikit-build]
 wheel.packages = ["python_pkg/LinAlgKit"]
 cmake.verbose = false
 cmake.build-type = "Release"
-
-[tool.scikit-build.cmake]
 # Pass the Python executable to CMake
-args = ["-DPYTHON_EXECUTABLE:FILEPATH={python.executable}"]
+cmake.args = ["-DPYTHON_EXECUTABLE:FILEPATH={python.executable}"]

@@ -1,217 +1,129 @@
-# Matrix Library
+# LinAlgKit
 
 [![Docs](https://img.shields.io/badge/docs-LinAlgKit%20Site-brightgreen)](https://SciComputeOrg.github.io/LinAlgKit/)
 [![CI](https://github.com/SciComputeOrg/LinAlgKit/actions/workflows/ci.yml/badge.svg)](https://github.com/SciComputeOrg/LinAlgKit/actions/workflows/ci.yml)
 [![Wheels](https://github.com/SciComputeOrg/LinAlgKit/actions/workflows/release.yml/badge.svg)](https://github.com/SciComputeOrg/LinAlgKit/actions/workflows/release.yml)
 [![PyPI](https://img.shields.io/pypi/v/LinAlgKit.svg)](https://pypi.org/project/LinAlgKit/)
 
-A high-performance C++ matrix library with support for various matrix operations, including addition, subtraction, multiplication, transposition, determinant calculation, and more.
+![LinAlgKit Banner](https://dummyimage.com/1200x280/0e1116/ffffff&text=LinAlgKit%20%E2%80%94%20Lightweight%20Linear%20Algebra%20for%20Python)
+
+LinAlgKit is a lightweight, NumPy-powered linear algebra toolkit for Python. It offers a minimal, clean API for matrices with scientific computing essentials: construction, arithmetic, transpose, trace, and determinant — all with first-class NumPy interoperability.
 
 ## Features
 
-- Support for different numeric types (int, float, double)
-- Common matrix operations (addition, subtraction, multiplication)
-- Scalar operations
-- Matrix transposition
-- Determinant calculation
-- Matrix inversion (for 2x2 matrices in this version)
-- Identity, zeros, and ones matrix generation
-- Google Test for unit testing
-- Google Benchmark for performance testing
-- CMake build system
+- Supports multiple numeric dtypes: int, float32, float64
+- Clean matrix API: `+`, `-`, `*` (matrix and scalar), `transpose()`, `trace()`, `determinant()`
+- Constructors: `identity(n)`, `zeros(r, c)`, `ones(r, c)`
+- NumPy interop: `.from_numpy(ndarray)`, `.to_numpy()`
+- Pure Python packaging — quick `pip install` on any platform
 
-## Requirements
-
-- C++17 or later
-- CMake 3.10 or later
-- Git (for downloading dependencies)
-- Google Test (automatically downloaded by CMake)
-- Google Benchmark (automatically downloaded by CMake, optional for benchmarks)
-
-## Building the Project
-
-### Prerequisites
-
-Make sure you have the following installed on your system:
-
-- CMake (3.10 or later)
-- A C++ compiler with C++17 support (GCC, Clang, or MSVC)
-- Git
-- Make or Ninja (for Unix-like systems) or Visual Studio (for Windows)
-
-### Build Instructions
-
-#### Linux/macOS
+## Installation
 
 ```bash
-# Create a build directory
-mkdir -p build && cd build
-
-# Configure the project
-cmake ..
-
-# Build the project
-cmake --build .
-
-# Run tests
-ctest --output-on-failure
-
-# Run the example
-./bin/examples/example
-
-# Run benchmarks (if enabled)
-./bin/benchmarks/matrix_benchmarks
-```
-
-#### Windows
-
-```cmd
-# Create a build directory
-mkdir build
-cd build
-
-# Configure the project (using Visual Studio 2019 as an example)
-cmake .. -G "Visual Studio 16 2019" -A x64
-
-# Build the project
-cmake --build . --config Release
-
-# Run tests
-ctest -C Release --output-on-failure
-
-# Run the example
-.\bin\Release\examples\example.exe
-
-# Run benchmarks (if enabled)
-.\bin\Release\benchmarks\matrix_benchmarks.exe
-```
-
-## Usage
-
-Here's a quick example of how to use the matrix library:
-
-```cpp
-#include <iostream>
-#include "matrixlib.h"
-
-int main() {
-    using namespace matrixlib;
-    
-    // Create matrices
-    Matrixi a = {{1, 2}, {3, 4}};
-    Matrixi b = {{5, 6}, {7, 8}};
-    
-    // Matrix operations
-    auto sum = a + b;
-    auto product = a * b;
-    auto transposed = a.transpose();
-    
-    // Output results
-    std::cout << "A + B =\n" << sum << "\n\n";
-    std::cout << "A * B =\n" << product << "\n\n";
-    std::cout << "A^T =\n" << transposed << "\n";
-    
-    return 0;
-}
-```
-
-## Running Tests
-
-Tests are built automatically when you build the project. You can run them using CTest:
-
-```bash
-# From the build directory
-ctest --output-on-failure
-```
-
-## Running Benchmarks
-
-Benchmarks are built when the `BUILD_BENCHMARKS` option is enabled (enabled by default). You can run them using:
-
-```bash
-# From the build directory
-./bin/benchmarks/matrix_benchmarks
-```
-
-## Python Package: LinAlgKit
-
-LinAlgKit is the Python package name for this library, built with pybind11 and scikit-build-core.
-
-### Quick install (editable)
-
-```bash
-sudo apt-get update
-sudo apt-get install -y python3 python3-dev python3-pip build-essential cmake
 pip install -U pip
-pip install -U scikit-build-core pybind11 numpy
-
-mkdir -p ~/linalgkit_build && cd ~/linalgkit_build
-pip install -e /mnt/c/z_open_source/matrixlib
+pip install LinAlgKit
 ```
 
-### Python usage examples
+Editable install for development:
+
+```bash
+pip install -U pip
+pip install -e .
+```
+
+## Quickstart
 
 ```python
 import numpy as np
 import LinAlgKit as lk
 
+# Construct from NumPy
 A = lk.Matrix.from_numpy(np.array([[1.0, 2.0], [3.0, 4.0]]))
-print("A =\n", A.to_numpy())
-print("det(A) =", A.determinant())
-print("trace(A) =", A.trace())
+B = lk.Matrix.identity(2)
 
-B = lk.MatrixF.from_numpy(np.ones((3, 3), dtype=np.float32))
-print("B rows, cols:", B.rows, B.cols)
+# Core ops
+C = A + B
+AT = A.transpose()
+detA = A.determinant()
 
-C = lk.MatrixI.from_numpy(np.array([[2, 0], [0, 2]], dtype=np.int32))
-print("C trace:", C.trace())
+print("C =\n", C.to_numpy())
+print("AT =\n", AT.to_numpy())
+print("det(A) =", detA)
 ```
 
-### NumPy interop
+## Python API overview
 
-- `Matrix/MatrixF/MatrixI.from_numpy(ndarray)` creates a matrix from a 2D numpy array (copy).
-- `.to_numpy()` returns a 2D numpy array (copy).
-- Future: zero-copy views require contiguous internal storage redesign.
+- `Matrix`, `MatrixF`, `MatrixI` classes with common operations
+- Functional helpers: `array`, `zeros`, `ones`, `eye`, `matmul`, `transpose`, `trace`, `det`
+- NumPy interop by design (copy in both directions for safety)
 
-### WSL/Windows notes
+## Design Philosophy
 
-- Prefer building in your WSL home directory (e.g., `~/linalgkit_build`) and point CMake to the Windows source directory to avoid locks on `/mnt/c`.
-- Example:
+- Vectorization-first: prefer NumPy operations and shapes that compose well.
+- Minimal surface area: focus on the 80% of linear algebra tasks used daily.
+- Explicit data flow: `.from_numpy()` and `.to_numpy()` are copy-based and clear.
+- Pythonic ergonomics: a small, predictable API that reads like the math.
+- Interop-ready: functions also accept NumPy arrays where sensible.
+
+## Why LinAlgKit? (vs. raw NumPy)
+
+- Matrix-first API with clear semantics (`Matrix`, `transpose()`, `determinant()`), helpful for pedagogy and readability.
+- Convenience constructors (`identity`, `zeros`, `ones`) aligned with matrix mental models.
+- Gentle learning curve for users coming from linear algebra courses before diving into broader NumPy idioms.
+- Clean separation between object API and functional helpers so you can mix OO and vectorized styles.
+
+## Testing
 
 ```bash
-mkdir -p ~/matrixlib_build && cd ~/matrixlib_build
-cmake -G "Unix Makefiles" -DBUILD_TESTS=ON -DBUILD_BENCHMARKS=ON -DPYTHON_EXECUTABLE=$(which python3) /mnt/c/z_open_source/matrixlib
-make -j
+python -m pip install -U pytest
+pytest -q
 ```
 
-## Determinant: optimized vs naive
+## NumPy interop
 
-- `determinant()` uses the Bareiss fraction-free LU algorithm (with partial pivoting), O(n^3).
-- `determinant_naive()` keeps the recursive Laplace expansion for tiny matrices/testing.
-- Inverse is implemented for 2x2; larger inverse will use LU in future.
+- `Matrix/MatrixF/MatrixI.from_numpy(array)` constructs from a 2D `ndarray` (copy)
+- `.to_numpy()` returns a 2D `ndarray` (copy)
+- For vectorized workflows, you can also use the functional API (`matmul`, `trace`, `det`) directly on NumPy arrays
+
+## Examples
+
+```python
+from LinAlgKit import array, eye, matmul, det
+
+A = array([[1., 2.], [3., 4.]])
+I = eye(2)
+print(det(A))         # -> -2.0
+print(matmul(A, I))   # -> A
+```
+
+## Scientific notes
+
+- Determinant, trace, and matmul are delegated to NumPy/`numpy.linalg` where applicable
+- API emphasizes clarity and composability; best used together with NumPy idioms
 
 ## Benchmarks
 
-Build with benchmarks enabled and run:
-
-```bash
-cd build
-./bin/benchmarks/matrix_benchmarks
-```
-
-Benchmarks include:
-- Addition, multiplication, transpose
-- Determinant (optimized LU/Bareiss)
-- Determinant (naive) — tiny sizes only
+For research-grade benchmarking, consider `asv` or simple scripts using `timeit` with NumPy arrays. A basic harness can be added in `scripts/` if needed.
 
 ## Roadmap
 
-- Python packaging polish (sdist/wheel, manylinux/musllinux wheels)
-- Sparse matrices (CSR): construction (from COO), mat-vec, sparse-dense matmul, optional SciPy interop
-- Blocked matrix multiplication for cache efficiency
-- Extended tests and property-based testing
-- Expanded benchmarks, profiling, and a research paper write-up
-- GitHub CI: C++ (GTest), Python wheels, import tests
+- Convenience APIs (slicing helpers, broadcasting-aware ops)
+- Optional SciPy interop (sparse CSR constructors)
+- Expanded tests and property-based testing
+- Example notebooks and gallery in `docs/`
+
+## Citation
+
+If you use LinAlgKit in academic work, please cite this repository:
+
+```bibtex
+@software{linalgkit2025,
+  author  = {SciComputeOrg},
+  title   = {LinAlgKit: A Lightweight Linear Algebra Toolkit for Python},
+  year    = {2025},
+  url     = {https://github.com/SciComputeOrg/LinAlgKit}
+}
+```
 
 ## License
 

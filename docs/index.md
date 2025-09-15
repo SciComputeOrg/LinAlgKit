@@ -1,10 +1,9 @@
 # LinAlgKit Documentation
 
-Welcome to the LinAlgKit docs. This project provides a C++ linear algebra core with Python bindings via pybind11.
+Welcome to the LinAlgKit docs. This project provides a simple, Python-first linear algebra API built on NumPy.
 
-- Source: `matrixlib/`
 - Python package: `LinAlgKit` in `python_pkg/LinAlgKit/`
-- Build system: CMake + scikit-build-core
+- Pure Python packaging with `setuptools`
 
 ## Contents
 
@@ -37,19 +36,16 @@ B = A.transpose()
 print(B.to_numpy())
 ```
 
-## C++ API Overview
+## Python API Overview
 
-- `matrixlib::Matrix<T>` for arithmetic types (`int`, `float`, `double`).
-- Operations: `+`, `-`, `*` (matrix-matrix, scalar), `transpose()`, `trace()`, `determinant()`.
-- Static constructors: `identity(n)`, `zeros(r, c)`, `ones(r, c)`.
-
-See `include/matrixlib.h` for the full interface.
+- `LinAlgKit.Matrix`, `LinAlgKit.MatrixF`, `LinAlgKit.MatrixI`
+- Operations: `+`, `-`, `*` (matrix-matrix, scalar), `transpose()`, `trace()`, `determinant()`
+- Constructors: `identity(n)`, `zeros(r, c)`, `ones(r, c)`
 
 ## Performance Notes
 
-- Determinant uses Bareiss fraction-free LU (O(n^3)).
-- Naive recursive determinant kept for tests/tiny sizes.
-- Current storage uses `std::vector<std::vector<T>>` for simplicity. A contiguous layout would enable zero-copy NumPy views and faster BLAS-like ops.
+- Uses NumPy under the hood for core routines.
+- Determinant and operations leverage `numpy.linalg` where applicable.
 
 ## Benchmarks
 

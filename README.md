@@ -1,5 +1,10 @@
 # Matrix Library
 
+[![Docs](https://img.shields.io/badge/docs-LinAlgKit%20Site-brightgreen)](https://SciComputeOrg.github.io/LinAlgKit/)
+[![CI](https://github.com/SciComputeOrg/LinAlgKit/actions/workflows/ci.yml/badge.svg)](https://github.com/SciComputeOrg/LinAlgKit/actions/workflows/ci.yml)
+[![Wheels](https://github.com/SciComputeOrg/LinAlgKit/actions/workflows/release.yml/badge.svg)](https://github.com/SciComputeOrg/LinAlgKit/actions/workflows/release.yml)
+[![PyPI](https://img.shields.io/pypi/v/LinAlgKit.svg)](https://pypi.org/project/LinAlgKit/)
+
 A high-performance C++ matrix library with support for various matrix operations, including addition, subtraction, multiplication, transposition, determinant calculation, and more.
 
 ## Features

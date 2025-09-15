@@ -12,14 +12,13 @@ theme:
     - content.code.copy
 
 nav:
-  - Home: docs/index.md
-  - Python Usage: README.md
-  - Tutorial: docs/tutorial.md
-  - API Reference: docs/api.md
-  - C++ API: docs/index.md#c-api-overview
-  - Performance: docs/performance.md
-  - Benchmarks: docs/index.md#benchmarks
-  - Releasing: docs/releasing.md
+  - Home: index.md
+  - Python Usage: tutorial.md
+  - API Reference: api.md
+  - C++ API: index.md#c-api-overview
+  - Performance: performance.md
+  - Benchmarks: index.md#benchmarks
+  - Releasing: releasing.md
 
 markdown_extensions:
   - admonition

@@ -565,7 +565,7 @@ print(A[0, 0])  # Still 1.0
 
 - Read the full [API Reference](api.md) for detailed method documentation
 - Check the [Performance Guide](performance.md) for optimization tips
-- See [FUTURE_UPDATES.md](../FUTURE_UPDATES.md) for upcoming features
+- See [FUTURE_UPDATES.md](https://github.com/SciComputeOrg/LinAlgKit/blob/main/FUTURE_UPDATES.md) for upcoming features
 - Contribute on [GitHub](https://github.com/SciComputeOrg/LinAlgKit)
 
 ---

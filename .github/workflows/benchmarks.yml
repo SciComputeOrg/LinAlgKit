@@ -19,23 +19,15 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install deps
+      - name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y cmake
-          python -m pip install -U pip numpy matplotlib
+          python -m pip install -U pip
+          python -m pip install numpy scipy matplotlib
+          python -m pip install -e .
 
-      - name: Configure C++ (Release)
+      - name: Run Python benchmarks
         run: |
-          cmake -S . -B build -DBUILD_BENCHMARKS=ON -DBUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=Release
-
-      - name: Build benchmarks
-        run: |
-          cmake --build build --config Release -j
-
-      - name: Run harness and save CSV
-        run: |
-          python scripts/run_benchmarks.py --build-dir build --csv benchmark_results.csv --plot benchmark_results.png
+          python scripts/run_benchmarks.py --csv benchmark_results.csv --plot benchmark_results.png
 
       - name: Prepare gh-pages data
         run: |
@@ -43,6 +35,17 @@ jobs:
           TS=$(date -u +"%Y%m%d-%H%M%S")
           cp benchmark_results.csv gh-pages-data/results-$TS.csv
           cp benchmark_results.png gh-pages-data/results-$TS.png
+          # Also keep latest copy
+          cp benchmark_results.csv gh-pages-data/latest.csv
+          cp benchmark_results.png gh-pages-data/latest.png
+
+      - name: Upload benchmark artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results
+          path: |
+            benchmark_results.csv
+            benchmark_results.png
 
       - name: Push to gh-pages branch
         uses: JamesIves/github-pages-deploy-action@v4

@@ -6,16 +6,71 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
-## [Unreleased]
+## [0.2.0] - 2025-12-24
 
 ### Added
-- Comprehensive API documentation with detailed examples (`docs/api.md`)
-- `FUTURE_UPDATES.md` roadmap document
-- `__version__` attribute for programmatic version checking
+
+- **Matrix Decompositions**
+  - `lu()` — LU decomposition with partial pivoting
+  - `qr()` — QR decomposition using Householder reflections
+  - `cholesky()` — Cholesky decomposition for positive-definite matrices
+  - `svd()` — Singular Value Decomposition
+
+- **Eigenvalue Methods**
+  - `eig()` — Eigenvalues and eigenvectors
+  - `eigvals()` — Eigenvalues only (faster)
+  - `eigh()` — Symmetric/Hermitian eigenvalue decomposition
+
+- **Linear System Solvers**
+  - `solve()` — Solve linear system Ax = b
+  - `inv()` — Matrix inverse
+  - `pinv()` — Moore-Penrose pseudoinverse
+  - `lstsq()` — Least-squares solution
+
+- **Matrix Analysis**
+  - `norm()` — Frobenius, 1, 2, inf norms
+  - `cond()` — Condition number
+  - `rank()` — Matrix rank
+
+- **Activation Functions** (Deep Learning)
+  - `sigmoid`, `relu`, `leaky_relu`, `elu`, `gelu`, `swish`
+  - `softplus`, `tanh`, `softmax`, `log_softmax`
+  - Derivative functions for backpropagation
+
+- **Loss Functions**
+  - `mse_loss`, `mae_loss`, `huber_loss`
+  - `cross_entropy_loss`, `binary_cross_entropy`
+
+- **Normalization**
+  - `batch_norm`, `layer_norm`, `instance_norm`
+
+- **Convolution Operations**
+  - `conv2d` — 2D convolution
+  - `max_pool2d`, `avg_pool2d`, `global_avg_pool2d`
+
+- **Weight Initialization**
+  - `xavier_uniform`, `xavier_normal`
+  - `he_uniform`, `he_normal`
+
+- **Utility Functions**
+  - `dropout`, `one_hot`, `clip`, `flatten`, `reshape`
+  - `normalize`, `cosine_similarity`, `euclidean_distance`
+  - `pairwise_distances`, `numerical_gradient`
+  - `outer`, `inner`, `dot`, `cross`
+
+- **Documentation**
+  - `docs/deep_learning.md` — Comprehensive deep learning functions guide
+  - `EXPANSION_PLAN.md` — Full roadmap through v1.0.0
+  - Updated API documentation with new methods
+
+- **Tests**
+  - 23 new tests for deep learning functions
+  - 15 tests for matrix decompositions and solvers
+  - Total: 41 tests passing
 
 ### Changed
-- Improved `pyproject.toml` metadata with keywords and classifiers for better PyPI discoverability
-- Updated release workflow to use token-based authentication
+- Version bumped to 0.2.0
+- Updated `__init__.py` to export 50+ new functions
 
 ---
 

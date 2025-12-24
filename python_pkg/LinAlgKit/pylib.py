@@ -101,6 +101,205 @@ class _BaseMatrix:
         r, c = idx
         self._data[r, c] = value
 
+    # --- Phase 1: Matrix Decompositions ---
+    
+    def lu(self) -> Tuple["_BaseMatrix", "_BaseMatrix", "_BaseMatrix"]:
+        """
+        LU decomposition with partial pivoting.
+        
+        Returns:
+            P, L, U: Permutation, Lower, Upper matrices such that P @ A = L @ U
+        """
+        from scipy.linalg import lu as scipy_lu
+        P, L, U = scipy_lu(self._data)
+        return self._wrap(P), self._wrap(L), self._wrap(U)
+    
+    def qr(self) -> Tuple["_BaseMatrix", "_BaseMatrix"]:
+        """
+        QR decomposition using Householder reflections.
+        
+        Returns:
+            Q, R: Orthogonal and upper triangular matrices such that A = Q @ R
+        """
+        Q, R = np.linalg.qr(self._data)
+        return self._wrap(Q), self._wrap(R)
+    
+    def cholesky(self) -> "_BaseMatrix":
+        """
+        Cholesky decomposition for positive-definite matrices.
+        
+        Returns:
+            L: Lower triangular matrix such that A = L @ L.T
+        
+        Raises:
+            LinAlgError: If matrix is not positive-definite
+        """
+        L = np.linalg.cholesky(self._data)
+        return self._wrap(L)
+    
+    def svd(self, full_matrices: bool = True) -> Tuple["_BaseMatrix", np.ndarray, "_BaseMatrix"]:
+        """
+        Singular Value Decomposition.
+        
+        Args:
+            full_matrices: If True, return full U and Vt; if False, return reduced
+        
+        Returns:
+            U, S, Vt: Unitary matrices and singular values such that A = U @ diag(S) @ Vt
+        """
+        U, S, Vt = np.linalg.svd(self._data, full_matrices=full_matrices)
+        return self._wrap(U), S, self._wrap(Vt)
+    
+    # --- Phase 1: Eigenvalue Problems ---
+    
+    def eig(self) -> Tuple[np.ndarray, "_BaseMatrix"]:
+        """
+        Compute eigenvalues and right eigenvectors.
+        
+        Returns:
+            eigenvalues: 1D array of eigenvalues
+            eigenvectors: Matrix where column i is eigenvector for eigenvalue i
+        """
+        eigenvalues, eigenvectors = np.linalg.eig(self._data)
+        return eigenvalues, self._wrap(eigenvectors)
+    
+    def eigvals(self) -> np.ndarray:
+        """
+        Compute eigenvalues only (faster than eig()).
+        
+        Returns:
+            eigenvalues: 1D array of eigenvalues
+        """
+        return np.linalg.eigvals(self._data)
+    
+    def eigh(self) -> Tuple[np.ndarray, "_BaseMatrix"]:
+        """
+        Eigenvalue decomposition for symmetric/Hermitian matrices.
+        More efficient and numerically stable than eig() for symmetric matrices.
+        
+        Returns:
+            eigenvalues: 1D array of real eigenvalues (sorted ascending)
+            eigenvectors: Matrix of orthonormal eigenvectors
+        """
+        eigenvalues, eigenvectors = np.linalg.eigh(self._data)
+        return eigenvalues, self._wrap(eigenvectors)
+    
+    # --- Phase 1: Linear System Solvers ---
+    
+    def solve(self, b: Union["_BaseMatrix", np.ndarray]) -> "_BaseMatrix":
+        """
+        Solve linear system Ax = b.
+        
+        Args:
+            b: Right-hand side (matrix or array)
+        
+        Returns:
+            x: Solution such that A @ x = b
+        """
+        if isinstance(b, _BaseMatrix):
+            b_arr = b._data
+        else:
+            b_arr = np.asarray(b)
+        x = np.linalg.solve(self._data, b_arr)
+        if x.ndim == 1:
+            x = x.reshape(-1, 1)
+        return self._wrap(x)
+    
+    def inv(self) -> "_BaseMatrix":
+        """
+        Compute the matrix inverse.
+        
+        Returns:
+            A_inv: Inverse matrix such that A @ A_inv = I
+        
+        Raises:
+            LinAlgError: If matrix is singular
+        """
+        return self._wrap(np.linalg.inv(self._data))
+    
+    def pinv(self, rcond: float = 1e-15) -> "_BaseMatrix":
+        """
+        Compute the Moore-Penrose pseudoinverse.
+        
+        Args:
+            rcond: Cutoff for small singular values
+        
+        Returns:
+            A_pinv: Pseudoinverse of the matrix
+        """
+        return self._wrap(np.linalg.pinv(self._data, rcond=rcond))
+    
+    def lstsq(self, b: Union["_BaseMatrix", np.ndarray]) -> Tuple["_BaseMatrix", np.ndarray, int, np.ndarray]:
+        """
+        Solve least-squares problem min ||Ax - b||.
+        
+        Args:
+            b: Right-hand side
+        
+        Returns:
+            x: Least-squares solution
+            residuals: Sum of squared residuals
+            rank: Effective rank of A
+            s: Singular values of A
+        """
+        if isinstance(b, _BaseMatrix):
+            b_arr = b._data
+        else:
+            b_arr = np.asarray(b)
+        x, residuals, rank, s = np.linalg.lstsq(self._data, b_arr, rcond=None)
+        if x.ndim == 1:
+            x = x.reshape(-1, 1)
+        return self._wrap(x), residuals, rank, s
+    
+    # --- Phase 1: Matrix Norms & Conditions ---
+    
+    def norm(self, ord: Union[int, float, str, None] = None) -> float:
+        """
+        Compute matrix norm.
+        
+        Args:
+            ord: Order of the norm:
+                - None or 'fro': Frobenius norm (default)
+                - 1: Maximum column sum
+                - 2: Spectral norm (largest singular value)
+                - inf or 'inf': Maximum row sum
+                - -1, -2, -inf: Minimum versions
+        
+        Returns:
+            norm: The computed norm value
+        """
+        if ord == 'inf':
+            ord = np.inf
+        elif ord == '-inf':
+            ord = -np.inf
+        return float(np.linalg.norm(self._data, ord=ord))
+    
+    def cond(self, p: Union[int, float, str, None] = None) -> float:
+        """
+        Compute the condition number.
+        
+        Args:
+            p: Order of the norm (default: 2)
+        
+        Returns:
+            cond: Condition number (ratio of largest to smallest singular value for p=2)
+        """
+        if p == 'inf':
+            p = np.inf
+        return float(np.linalg.cond(self._data, p=p))
+    
+    def rank(self, tol: float = None) -> int:
+        """
+        Compute the matrix rank.
+        
+        Args:
+            tol: Threshold below which singular values are considered zero
+        
+        Returns:
+            rank: Number of linearly independent rows/columns
+        """
+        return int(np.linalg.matrix_rank(self._data, tol=tol))
+
 
 class Matrix(_BaseMatrix):
     def __init__(self, rows: int | None = None, cols: int | None = None, value: Number = 0.0):

@@ -3,6 +3,7 @@ site_description: Documentation for the LinAlgKit C++/Python linear algebra tool
 repo_url: https://github.com/SciComputeOrg/LinAlgKit
 repo_name: SciComputeOrg/LinAlgKit
 site_url: https://SciComputeOrg.github.io/LinAlgKit/
+use_directory_urls: true
 
 theme:
   name: material

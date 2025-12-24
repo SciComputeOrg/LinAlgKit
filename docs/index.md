@@ -1,60 +1,87 @@
 # LinAlgKit Documentation
 
-Welcome to the LinAlgKit docs. This project provides a simple, Python-first linear algebra API built on NumPy.
+Welcome to the LinAlgKit docs. This project provides a comprehensive, Python-first linear algebra and deep learning math library built on NumPy.
 
-- Python package: `LinAlgKit` in `python_pkg/LinAlgKit/`
-- Pure Python packaging with `setuptools`
+**Version: 0.2.1** | [GitHub](https://github.com/SciComputeOrg/LinAlgKit) | [PyPI](https://pypi.org/project/LinAlgKit/)
 
-## Contents
+## Features
 
-- Getting Started
-- Python Usage
-- C++ API Overview
-- Performance Notes
-- Benchmarks
-- Releasing
+- 🔢 **Matrix Operations** - Full matrix algebra with decompositions
+- 🧠 **Deep Learning Functions** - Activations, losses, normalization
+- ⚡ **High Performance** - Numba JIT acceleration up to 13x faster
+- 🐍 **Pythonic API** - Clean, intuitive interface
 
-## Getting Started
-
-See the project `README.md` for quick install and build instructions. For Python usage with editable install:
+## Quick Install
 
 ```bash
-pip install -U pip scikit-build-core pybind11 numpy
-mkdir -p ~/linalgkit_build && cd ~/linalgkit_build
-pip install -e /path/to/repo
+pip install LinAlgKit
 ```
 
-## Python Usage
+For high-performance functions:
+```bash
+pip install LinAlgKit numba
+```
+
+## Quick Start
 
 ```python
-import numpy as np
 import LinAlgKit as lk
+import numpy as np
 
-A = lk.Matrix.from_numpy(np.array([[1.0, 2.0],[3.0, 4.0]]))
-print(A.determinant())
-B = A.transpose()
-print(B.to_numpy())
+# Create matrices
+A = lk.Matrix.from_numpy(np.array([[1.0, 2.0], [3.0, 4.0]]))
+
+# Matrix operations
+print(A.determinant())  # -2.0
+print(A.T.to_numpy())   # Transpose
+
+# Decompositions
+L, U, P = A.lu()
+Q, R = A.qr()
+
+# Deep learning functions
+x = np.random.randn(100, 10)
+output = lk.relu(x)
+probs = lk.softmax(x)
+loss = lk.cross_entropy_loss(probs, targets)
 ```
 
-## Python API Overview
+## Documentation
 
-- `LinAlgKit.Matrix`, `LinAlgKit.MatrixF`, `LinAlgKit.MatrixI`
-- Operations: `+`, `-`, `*` (matrix-matrix, scalar), `transpose()`, `trace()`, `determinant()`
-- Constructors: `identity(n)`, `zeros(r, c)`, `ones(r, c)`
+| Section | Description |
+|---------|-------------|
+| [Getting Started](tutorial.md) | Installation, basic usage, examples |
+| [API Reference](api.md) | Complete API documentation |
+| [Deep Learning](deep_learning.md) | Activations, losses, normalization |
+| [Performance](performance.md) | Benchmarks and optimization |
+| [Release Notes](releases.md) | Version history and changelog |
 
-## Performance Notes
+## What's New in v0.2.1
 
-- Uses NumPy under the hood for core routines.
-- Determinant and operations leverage `numpy.linalg` where applicable.
+### High-Performance `fast` Module
+```python
+from LinAlgKit import fast
 
-## Benchmarks
-
-See `benchmarks/benchmark_matrix.cpp`. Run after building with benchmarks enabled:
-
-```bash
-./bin/benchmarks/matrix_benchmarks
+# Up to 13x faster with Numba JIT
+loss = fast.fast_mse_loss(pred, target)
+output = fast.fast_relu(x)
 ```
 
-## Releasing
+### Performance Improvements
 
-See `docs/releasing.md`.
+| Function | Speedup |
+|----------|---------|
+| `mae_loss` | **13.1x** |
+| `mse_loss` | **12.0x** |
+| `leaky_relu` | **4.4x** |
+| `gelu` | **2.6x** |
+
+### In-Place Operations
+```python
+A.add_(B)      # No memory allocation
+A.mul_(2.0)    # Faster than A = A * 2
+```
+
+## License
+
+MIT License - see [LICENSE](https://github.com/SciComputeOrg/LinAlgKit/blob/main/LICENSE)

@@ -3,7 +3,14 @@ LinAlgKit — Comprehensive Python-first linear algebra and deep learning math l
 
 Pure-Python + NumPy implementation for easy installs and a clean API.
 Includes matrices, decompositions, activation functions, loss functions, and more.
+
+For high-performance operations, use the `fast` submodule which provides Numba JIT-compiled
+functions that can be 10-50x faster than the standard implementations.
 """
+
+# Import fast module for HAS_NUMBA flag
+from . import fast as _fast
+HAS_NUMBA = _fast.HAS_NUMBA
 
 from .pylib import (
     # Matrix Classes

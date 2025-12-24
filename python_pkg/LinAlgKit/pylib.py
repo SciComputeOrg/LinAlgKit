@@ -46,11 +46,29 @@ class _BaseMatrix:
 
     # --- conversion ---
     def to_numpy(self) -> np.ndarray:
+        """Return a copy of the underlying data."""
         return self._data.copy()
+    
+    def to_numpy_view(self) -> np.ndarray:
+        """Return a view of the underlying data (zero-copy, but modifications affect matrix)."""
+        return self._data
 
     # --- ops ---
-    def transpose(self) -> "_BaseMatrix":
-        return self._wrap(self._data.T.copy())
+    def transpose(self, copy: bool = True) -> "_BaseMatrix":
+        """
+        Transpose the matrix.
+        
+        Args:
+            copy: If True (default), return a copy. If False, return a view (faster but shared memory).
+        """
+        if copy:
+            return self._wrap(self._data.T.copy())
+        return self._wrap(self._data.T)
+    
+    @property
+    def T(self) -> "_BaseMatrix":
+        """Transpose property (returns view for performance)."""
+        return self._wrap(self._data.T)
 
     def trace(self) -> Number:
         return float(np.trace(self._data)) if self._data.dtype.kind == 'f' else int(np.trace(self._data))
@@ -76,7 +94,7 @@ class _BaseMatrix:
             det += sign * float(a[0, j]) * Matrix.from_numpy(sub).determinant_naive()
         return det
 
-    # arithmetic
+    # arithmetic (returns new matrix)
     def __add__(self, other: "_BaseMatrix") -> "_BaseMatrix":
         return self._wrap(self._data + other._data)
 
@@ -91,6 +109,31 @@ class _BaseMatrix:
 
     def __rmul__(self, scalar: Number) -> "_BaseMatrix":
         return self._wrap(scalar * self._data)
+    
+    # In-place operations (faster, no memory allocation)
+    def add_(self, other: "_BaseMatrix") -> "_BaseMatrix":
+        """In-place addition: self += other. Returns self for chaining."""
+        np.add(self._data, other._data, out=self._data)
+        return self
+    
+    def sub_(self, other: "_BaseMatrix") -> "_BaseMatrix":
+        """In-place subtraction: self -= other. Returns self for chaining."""
+        np.subtract(self._data, other._data, out=self._data)
+        return self
+    
+    def mul_(self, scalar: Number) -> "_BaseMatrix":
+        """In-place scalar multiplication: self *= scalar. Returns self for chaining."""
+        np.multiply(self._data, scalar, out=self._data)
+        return self
+    
+    def hadamard(self, other: "_BaseMatrix") -> "_BaseMatrix":
+        """Element-wise (Hadamard) product."""
+        return self._wrap(self._data * other._data)
+    
+    def hadamard_(self, other: "_BaseMatrix") -> "_BaseMatrix":
+        """In-place element-wise product."""
+        np.multiply(self._data, other._data, out=self._data)
+        return self
 
     # indexing helpers (row, col)
     def __getitem__(self, idx: Tuple[int, int]):

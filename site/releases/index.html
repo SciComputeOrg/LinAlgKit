@@ -1,0 +1,1786 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for the LinAlgKit C++/Python linear algebra toolkit">
+      
+      
+      
+        <link rel="canonical" href="https://SciComputeOrg.github.io/LinAlgKit/releases/">
+      
+      
+        <link rel="prev" href="../performance/">
+      
+      
+        <link rel="next" href="../releasing/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Release Notes - LinAlgKit Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#release-notes" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="LinAlgKit Docs" class="md-header__button md-logo" aria-label="LinAlgKit Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            LinAlgKit Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Release Notes
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/SciComputeOrg/LinAlgKit" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    SciComputeOrg/LinAlgKit
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../tutorial/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Getting Started
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../api/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  API Reference
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../deep_learning/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Deep Learning
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../performance/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Performance
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Release Notes
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../releasing/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Releasing
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="LinAlgKit Docs" class="md-nav__button md-logo" aria-label="LinAlgKit Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    LinAlgKit Docs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/SciComputeOrg/LinAlgKit" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    SciComputeOrg/LinAlgKit
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deep_learning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deep Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../performance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Notes
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#v021-performance-optimizations-2025-12-24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.2.1 - Performance Optimizations (2025-12-24)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="v0.2.1 - Performance Optimizations (2025-12-24)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#performance-improvements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚀 Performance Improvements
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚀 Performance Improvements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#benchmark-results-5m-elements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benchmark Results (5M elements)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#new-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        New Features
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="New Features">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fast-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fast Module
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#in-place-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        In-Place Operations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#zero-copy-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Zero-Copy Access
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v020-deep-learning-expansion-2025-12-24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.2.0 - Deep Learning Expansion (2025-12-24)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="v0.2.0 - Deep Learning Expansion (2025-12-24)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#deep-learning-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🧠 Deep Learning Functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#activation-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Activation Functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loss-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Loss Functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#normalization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Normalization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#convolution-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Convolution Operations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#weight-initialization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Weight Initialization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#utility-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Utility Functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#matrix-decompositions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Matrix Decompositions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#eigenvalue-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Eigenvalue Methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linear-solvers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Linear Solvers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#matrix-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Matrix Analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v010-initial-release-2025-12-24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.1.0 - Initial Release (2025-12-24)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="v0.1.0 - Initial Release (2025-12-24)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core Features
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Core Features">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#matrix-classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Matrix Classes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#static-constructors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Static Constructors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#matrix-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Matrix Operations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arithmetic-operators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arithmetic Operators
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#numpy-interoperability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NumPy Interoperability
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#element-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Element Access
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#upgrade-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Upgrade Guide
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Upgrade Guide">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#from-v010-to-v020" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        From v0.1.0 to v0.2.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from-v020-to-v021" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        From v0.2.0 to v0.2.1
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#roadmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Roadmap
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Roadmap">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#upcoming-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Upcoming Features
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../releasing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Releasing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#v021-performance-optimizations-2025-12-24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.2.1 - Performance Optimizations (2025-12-24)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="v0.2.1 - Performance Optimizations (2025-12-24)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#performance-improvements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚀 Performance Improvements
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚀 Performance Improvements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#benchmark-results-5m-elements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benchmark Results (5M elements)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#new-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        New Features
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="New Features">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fast-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fast Module
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#in-place-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        In-Place Operations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#zero-copy-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Zero-Copy Access
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v020-deep-learning-expansion-2025-12-24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.2.0 - Deep Learning Expansion (2025-12-24)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="v0.2.0 - Deep Learning Expansion (2025-12-24)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#deep-learning-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🧠 Deep Learning Functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#activation-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Activation Functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loss-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Loss Functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#normalization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Normalization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#convolution-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Convolution Operations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#weight-initialization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Weight Initialization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#utility-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Utility Functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#matrix-decompositions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Matrix Decompositions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#eigenvalue-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Eigenvalue Methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linear-solvers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Linear Solvers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#matrix-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Matrix Analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v010-initial-release-2025-12-24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.1.0 - Initial Release (2025-12-24)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="v0.1.0 - Initial Release (2025-12-24)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core Features
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Core Features">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#matrix-classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Matrix Classes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#static-constructors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Static Constructors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#matrix-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Matrix Operations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arithmetic-operators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arithmetic Operators
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#numpy-interoperability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NumPy Interoperability
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#element-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Element Access
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#upgrade-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Upgrade Guide
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Upgrade Guide">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#from-v010-to-v020" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        From v0.1.0 to v0.2.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from-v020-to-v021" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        From v0.2.0 to v0.2.1
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#roadmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Roadmap
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Roadmap">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#upcoming-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Upcoming Features
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="release-notes">Release Notes<a class="headerlink" href="#release-notes" title="Permanent link">&para;</a></h1>
+<p>This document contains detailed release notes for each version of LinAlgKit.</p>
+<hr />
+<h2 id="v021-performance-optimizations-2025-12-24">v0.2.1 - Performance Optimizations (2025-12-24)<a class="headerlink" href="#v021-performance-optimizations-2025-12-24" title="Permanent link">&para;</a></h2>
+<h3 id="performance-improvements">🚀 Performance Improvements<a class="headerlink" href="#performance-improvements" title="Permanent link">&para;</a></h3>
+<p>This release introduces significant performance optimizations using Numba JIT compilation.</p>
+<h4 id="benchmark-results-5m-elements">Benchmark Results (5M elements)<a class="headerlink" href="#benchmark-results-5m-elements" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Standard</th>
+<th>Fast (JIT)</th>
+<th>Speedup</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mse_loss</code></td>
+<td>33.75ms</td>
+<td>2.82ms</td>
+<td><strong>12.0x</strong></td>
+</tr>
+<tr>
+<td><code>mae_loss</code></td>
+<td>34.86ms</td>
+<td>2.67ms</td>
+<td><strong>13.1x</strong></td>
+</tr>
+<tr>
+<td><code>leaky_relu</code></td>
+<td>30.16ms</td>
+<td>6.81ms</td>
+<td><strong>4.4x</strong></td>
+</tr>
+<tr>
+<td><code>gelu</code></td>
+<td>200.78ms</td>
+<td>76.44ms</td>
+<td><strong>2.6x</strong></td>
+</tr>
+<tr>
+<td><code>tanh</code></td>
+<td>37.33ms</td>
+<td>15.29ms</td>
+<td><strong>2.4x</strong></td>
+</tr>
+<tr>
+<td><code>swish</code></td>
+<td>100.27ms</td>
+<td>54.62ms</td>
+<td><strong>1.8x</strong></td>
+</tr>
+<tr>
+<td><code>elu</code></td>
+<td>65.14ms</td>
+<td>40.06ms</td>
+<td><strong>1.6x</strong></td>
+</tr>
+<tr>
+<td><code>sigmoid</code></td>
+<td>80.98ms</td>
+<td>54.71ms</td>
+<td><strong>1.5x</strong></td>
+</tr>
+<tr>
+<td><code>softplus</code></td>
+<td>108.80ms</td>
+<td>70.88ms</td>
+<td><strong>1.5x</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="new-features">New Features<a class="headerlink" href="#new-features" title="Permanent link">&para;</a></h3>
+<h4 id="fast-module"><code>fast</code> Module<a class="headerlink" href="#fast-module" title="Permanent link">&para;</a></h4>
+<p>A new high-performance module with Numba JIT-compiled functions:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">LinAlgKit</span><span class="w"> </span><span class="kn">import</span> <span class="n">fast</span>
+
+<span class="c1"># 12x faster loss computation</span>
+<span class="n">loss</span> <span class="o">=</span> <span class="n">fast</span><span class="o">.</span><span class="n">fast_mse_loss</span><span class="p">(</span><span class="n">predictions</span><span class="p">,</span> <span class="n">targets</span><span class="p">)</span>
+
+<span class="c1"># 4.4x faster activation</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">fast</span><span class="o">.</span><span class="n">fast_leaky_relu</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Available fast functions:
+- <code>fast_sigmoid</code>, <code>fast_relu</code>, <code>fast_leaky_relu</code>, <code>fast_elu</code>
+- <code>fast_gelu</code>, <code>fast_swish</code>, <code>fast_tanh</code>, <code>fast_softplus</code>
+- <code>fast_mse_loss</code>, <code>fast_mae_loss</code>, <code>fast_normalize</code></p>
+<h4 id="in-place-operations">In-Place Operations<a class="headerlink" href="#in-place-operations" title="Permanent link">&para;</a></h4>
+<p>New in-place methods that avoid memory allocation:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">A</span><span class="o">.</span><span class="n">add_</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>      <span class="c1"># A += B in-place</span>
+<span class="n">A</span><span class="o">.</span><span class="n">sub_</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>      <span class="c1"># A -= B in-place</span>
+<span class="n">A</span><span class="o">.</span><span class="n">mul_</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>    <span class="c1"># A *= 2.0 in-place</span>
+<span class="n">A</span><span class="o">.</span><span class="n">hadamard_</span><span class="p">(</span><span class="n">B</span><span class="p">)</span> <span class="c1"># Element-wise multiply in-place</span>
+</code></pre></div>
+
+<h4 id="zero-copy-access">Zero-Copy Access<a class="headerlink" href="#zero-copy-access" title="Permanent link">&para;</a></h4>
+<ul>
+<li><code>.T</code> property - Transpose view (no copy)</li>
+<li><code>to_numpy_view()</code> - Direct array access (no copy)</li>
+<li><code>transpose(copy=False)</code> - Optional zero-copy transpose</li>
+</ul>
+<h3 id="dependencies">Dependencies<a class="headerlink" href="#dependencies" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Optional: <code>numba&gt;=0.57.0</code> (for JIT acceleration)</li>
+</ul>
+<hr />
+<h2 id="v020-deep-learning-expansion-2025-12-24">v0.2.0 - Deep Learning Expansion (2025-12-24)<a class="headerlink" href="#v020-deep-learning-expansion-2025-12-24" title="Permanent link">&para;</a></h2>
+<h3 id="deep-learning-functions">🧠 Deep Learning Functions<a class="headerlink" href="#deep-learning-functions" title="Permanent link">&para;</a></h3>
+<p>Major expansion with 50+ mathematical functions for deep learning.</p>
+<h3 id="activation-functions">Activation Functions<a class="headerlink" href="#activation-functions" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>sigmoid</code>, <code>relu</code>, <code>leaky_relu</code>, <code>elu</code>, <code>gelu</code>, <code>swish</code></li>
+<li><code>softplus</code>, <code>tanh</code>, <code>softmax</code>, <code>log_softmax</code></li>
+<li>Derivative functions for backpropagation</li>
+</ul>
+<h3 id="loss-functions">Loss Functions<a class="headerlink" href="#loss-functions" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>mse_loss</code> - Mean Squared Error</li>
+<li><code>mae_loss</code> - Mean Absolute Error</li>
+<li><code>huber_loss</code> - Robust loss</li>
+<li><code>cross_entropy_loss</code> - Multi-class classification</li>
+<li><code>binary_cross_entropy</code> - Binary classification</li>
+</ul>
+<h3 id="normalization">Normalization<a class="headerlink" href="#normalization" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>batch_norm</code> - Batch normalization</li>
+<li><code>layer_norm</code> - Layer normalization (transformers)</li>
+<li><code>instance_norm</code> - Instance normalization (style transfer)</li>
+</ul>
+<h3 id="convolution-operations">Convolution Operations<a class="headerlink" href="#convolution-operations" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>conv2d</code> - 2D convolution</li>
+<li><code>max_pool2d</code>, <code>avg_pool2d</code> - Pooling</li>
+<li><code>global_avg_pool2d</code> - Global average pooling</li>
+</ul>
+<h3 id="weight-initialization">Weight Initialization<a class="headerlink" href="#weight-initialization" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>xavier_uniform</code>, <code>xavier_normal</code> - For tanh/sigmoid</li>
+<li><code>he_uniform</code>, <code>he_normal</code> - For ReLU networks</li>
+</ul>
+<h3 id="utility-functions">Utility Functions<a class="headerlink" href="#utility-functions" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>dropout</code>, <code>one_hot</code>, <code>clip</code>, <code>flatten</code>, <code>reshape</code></li>
+<li><code>normalize</code>, <code>cosine_similarity</code>, <code>euclidean_distance</code></li>
+<li><code>pairwise_distances</code>, <code>numerical_gradient</code></li>
+</ul>
+<h3 id="matrix-decompositions">Matrix Decompositions<a class="headerlink" href="#matrix-decompositions" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>lu()</code> - LU decomposition with partial pivoting</li>
+<li><code>qr()</code> - QR decomposition</li>
+<li><code>cholesky()</code> - Cholesky decomposition</li>
+<li><code>svd()</code> - Singular Value Decomposition</li>
+</ul>
+<h3 id="eigenvalue-methods">Eigenvalue Methods<a class="headerlink" href="#eigenvalue-methods" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>eig()</code> - Eigenvalues and eigenvectors</li>
+<li><code>eigvals()</code> - Eigenvalues only</li>
+<li><code>eigh()</code> - Symmetric eigenvalue decomposition</li>
+</ul>
+<h3 id="linear-solvers">Linear Solvers<a class="headerlink" href="#linear-solvers" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>solve()</code> - Solve Ax = b</li>
+<li><code>inv()</code> - Matrix inverse</li>
+<li><code>pinv()</code> - Moore-Penrose pseudoinverse</li>
+<li><code>lstsq()</code> - Least-squares solution</li>
+</ul>
+<h3 id="matrix-analysis">Matrix Analysis<a class="headerlink" href="#matrix-analysis" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>norm()</code> - Multiple norm types</li>
+<li><code>cond()</code> - Condition number</li>
+<li><code>rank()</code> - Matrix rank</li>
+</ul>
+<hr />
+<h2 id="v010-initial-release-2025-12-24">v0.1.0 - Initial Release (2025-12-24)<a class="headerlink" href="#v010-initial-release-2025-12-24" title="Permanent link">&para;</a></h2>
+<h3 id="core-features">Core Features<a class="headerlink" href="#core-features" title="Permanent link">&para;</a></h3>
+<h4 id="matrix-classes">Matrix Classes<a class="headerlink" href="#matrix-classes" title="Permanent link">&para;</a></h4>
+<ul>
+<li><code>Matrix</code> - Double-precision (float64)</li>
+<li><code>MatrixF</code> - Single-precision (float32)</li>
+<li><code>MatrixI</code> - Integer matrix</li>
+</ul>
+<h4 id="static-constructors">Static Constructors<a class="headerlink" href="#static-constructors" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><code><span class="n">Matrix</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>   <span class="c1"># 3x3 identity</span>
+<span class="n">Matrix</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>   <span class="c1"># 2x3 zeros</span>
+<span class="n">Matrix</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>    <span class="c1"># 4x4 ones</span>
+</code></pre></div>
+
+<h4 id="matrix-operations">Matrix Operations<a class="headerlink" href="#matrix-operations" title="Permanent link">&para;</a></h4>
+<ul>
+<li><code>transpose()</code> - Transposition</li>
+<li><code>trace()</code> - Sum of diagonal</li>
+<li><code>determinant()</code> - LU-based O(n³)</li>
+<li><code>determinant_naive()</code> - Recursive (small matrices)</li>
+</ul>
+<h4 id="arithmetic-operators">Arithmetic Operators<a class="headerlink" href="#arithmetic-operators" title="Permanent link">&para;</a></h4>
+<ul>
+<li><code>A + B</code> - Element-wise addition</li>
+<li><code>A - B</code> - Element-wise subtraction</li>
+<li><code>A * B</code> - Matrix multiplication</li>
+<li><code>2 * A</code> - Scalar multiplication</li>
+</ul>
+<h4 id="numpy-interoperability">NumPy Interoperability<a class="headerlink" href="#numpy-interoperability" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><code><span class="c1"># From NumPy</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">Matrix</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">np_array</span><span class="p">)</span>
+
+<span class="c1"># To NumPy</span>
+<span class="n">np_array</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+</code></pre></div>
+
+<h4 id="element-access">Element Access<a class="headerlink" href="#element-access" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><code><span class="n">val</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>    <span class="c1"># Get element</span>
+<span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mf">5.0</span>    <span class="c1"># Set element</span>
+</code></pre></div>
+
+<hr />
+<h2 id="upgrade-guide">Upgrade Guide<a class="headerlink" href="#upgrade-guide" title="Permanent link">&para;</a></h2>
+<h3 id="from-v010-to-v020">From v0.1.0 to v0.2.0<a class="headerlink" href="#from-v010-to-v020" title="Permanent link">&para;</a></h3>
+<p>No breaking changes. All v0.1.0 code works unchanged.</p>
+<p><strong>New imports available:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">LinAlgKit</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">lk</span>
+
+<span class="c1"># New activation functions</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">lk</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">lk</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">logits</span><span class="p">)</span>
+
+<span class="c1"># New matrix methods</span>
+<span class="n">L</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">cholesky</span><span class="p">()</span>
+<span class="n">eigenvalues</span><span class="p">,</span> <span class="n">eigenvectors</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">eig</span><span class="p">()</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="from-v020-to-v021">From v0.2.0 to v0.2.1<a class="headerlink" href="#from-v020-to-v021" title="Permanent link">&para;</a></h3>
+<p>No breaking changes. Install <code>numba</code> for automatic acceleration:</p>
+<div class="codehilite"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>numba
+</code></pre></div>
+
+<p><strong>Use fast module for best performance:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">LinAlgKit</span><span class="w"> </span><span class="kn">import</span> <span class="n">fast</span>
+
+<span class="c1"># Check if Numba is available</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">LinAlgKit</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">lk</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">lk</span><span class="o">.</span><span class="n">HAS_NUMBA</span><span class="p">)</span>  <span class="c1"># True if numba installed</span>
+</code></pre></div>
+
+<hr />
+<h2 id="roadmap">Roadmap<a class="headerlink" href="#roadmap" title="Permanent link">&para;</a></h2>
+<p>See <a href="https://github.com/SciComputeOrg/LinAlgKit/blob/main/EXPANSION_PLAN.md">EXPANSION_PLAN.md</a> for the complete roadmap.</p>
+<h3 id="upcoming-features">Upcoming Features<a class="headerlink" href="#upcoming-features" title="Permanent link">&para;</a></h3>
+<p><strong>v0.3.0</strong> (Q1 2025)
+- Sparse matrix support (CSR, COO)
+- Iterative solvers (CG, GMRES)
+- Matrix functions (expm, logm, sqrtm)</p>
+<p><strong>v0.4.0</strong> (Q2 2025)
+- C++/Rust native core
+- BLAS/LAPACK integration
+- GPU acceleration (CUDA)</p>
+<p><strong>v1.0.0</strong> (2027)
+- Production-ready
+- Multi-backend support
+- Distributed computing</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

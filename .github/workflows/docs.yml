@@ -3,6 +3,10 @@ name: Deploy MkDocs
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'site/**'
+      - 'docs/**'
+      - 'mkdocs.yml'
   workflow_dispatch:
 
 permissions:
@@ -11,7 +15,7 @@ permissions:
   id-token: write
 
 jobs:
-  build-deploy:
+  deploy:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -19,21 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install MkDocs and theme
-        run: |
-          python -m pip install -U pip
-          python -m pip install mkdocs mkdocs-material
-
-      - name: Build docs
-        run: |
-          mkdocs build
-
-      - name: Upload artifact
+      - name: Upload site folder
         uses: actions/upload-pages-artifact@v3
         with:
           path: site
@@ -41,4 +31,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-

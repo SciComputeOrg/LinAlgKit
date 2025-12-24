@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "LinAlgKit"
-version = "0.2.0"
+version = "0.2.1"
 description = "A lightweight, NumPy-powered linear algebra toolkit for Python with a clean matrix API"
 readme = "README.md"
 authors = [{ name = "LinAlgKit Developers" }]

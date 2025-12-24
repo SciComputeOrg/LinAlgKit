@@ -13,11 +13,11 @@ theme:
 
 nav:
   - Home: index.md
-  - Python Usage: tutorial.md
+  - Getting Started: tutorial.md
   - API Reference: api.md
-  - C++ API: index.md
+  - Deep Learning: deep_learning.md
   - Performance: performance.md
-  - Benchmarks: index.md
+  - Release Notes: releases.md
   - Releasing: releasing.md
 
 markdown_extensions:

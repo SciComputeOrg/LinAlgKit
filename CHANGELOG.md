@@ -6,6 +6,47 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## [0.2.1] - 2025-12-24
+
+### Added
+
+- **High-Performance `fast` Module**
+  - Numba JIT-compiled activation functions: `fast_sigmoid`, `fast_relu`, `fast_leaky_relu`, `fast_elu`, `fast_gelu`, `fast_swish`, `fast_tanh`, `fast_softplus`
+  - JIT-compiled loss functions: `fast_mse_loss`, `fast_mae_loss` (up to **13x faster**)
+  - `fast_normalize` for L2 normalization
+  - `HAS_NUMBA` flag to check if Numba is available
+
+- **In-Place Matrix Operations**
+  - `add_(other)` — In-place addition
+  - `sub_(other)` — In-place subtraction
+  - `mul_(scalar)` — In-place scalar multiplication
+  - `hadamard_(other)` — In-place element-wise product
+
+- **Zero-Copy Access**
+  - `.T` property — Transpose view (no memory copy)
+  - `to_numpy_view()` — Direct access to underlying array
+  - `transpose(copy=False)` — Optional zero-copy transpose
+
+- **Documentation**
+  - `docs/releases.md` — Comprehensive release notes
+  - `scripts/benchmark_fast.py` — Performance benchmark script
+
+### Performance Improvements
+
+| Function | Speedup |
+|----------|---------|
+| `mae_loss` | **13.1x** |
+| `mse_loss` | **12.0x** |
+| `leaky_relu` | **4.4x** |
+| `gelu` | **2.6x** |
+| `tanh` | **2.4x** |
+
+### Dependencies
+
+- Optional: `numba>=0.57.0` for JIT acceleration
+
+---
+
 ## [0.2.0] - 2025-12-24
 
 ### Added

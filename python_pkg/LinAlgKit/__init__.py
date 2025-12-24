@@ -18,6 +18,7 @@ from .pylib import (
     det,
 )
 
+__version__ = "0.1.0"
 BACKEND = "python"
 
 __all__ = [
@@ -33,4 +34,5 @@ __all__ = [
     "trace",
     "det",
     "BACKEND",
+    "__version__",
 ]

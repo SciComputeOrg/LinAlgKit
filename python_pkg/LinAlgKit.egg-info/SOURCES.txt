@@ -1,0 +1,11 @@
+LICENSE
+README.md
+pyproject.toml
+python_pkg/LinAlgKit/__init__.py
+python_pkg/LinAlgKit/pylib.py
+python_pkg/LinAlgKit.egg-info/PKG-INFO
+python_pkg/LinAlgKit.egg-info/SOURCES.txt
+python_pkg/LinAlgKit.egg-info/dependency_links.txt
+python_pkg/LinAlgKit.egg-info/requires.txt
+python_pkg/LinAlgKit.egg-info/top_level.txt
+tests/test_basic.py

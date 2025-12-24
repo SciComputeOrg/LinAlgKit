@@ -24,7 +24,16 @@ class _BaseMatrix:
         a = np.asarray(arr)
         if a.ndim != 2:
             raise ValueError("expected a 2D array")
-        return cls(a.copy())
+        obj = object.__new__(cls)
+        obj._data = a.copy()
+        return obj
+
+    @classmethod
+    def _wrap(cls, arr: np.ndarray) -> "_BaseMatrix":
+        """Wrap a numpy array in a Matrix instance without calling __init__."""
+        obj = object.__new__(cls)
+        obj._data = arr
+        return obj
 
     # --- properties ---
     @property
@@ -41,7 +50,7 @@ class _BaseMatrix:
 
     # --- ops ---
     def transpose(self) -> "_BaseMatrix":
-        return self.__class__(self._data.T)
+        return self._wrap(self._data.T.copy())
 
     def trace(self) -> Number:
         return float(np.trace(self._data)) if self._data.dtype.kind == 'f' else int(np.trace(self._data))
@@ -69,19 +78,19 @@ class _BaseMatrix:
 
     # arithmetic
     def __add__(self, other: "_BaseMatrix") -> "_BaseMatrix":
-        return self.__class__(self._data + other._data)
+        return self._wrap(self._data + other._data)
 
     def __sub__(self, other: "_BaseMatrix") -> "_BaseMatrix":
-        return self.__class__(self._data - other._data)
+        return self._wrap(self._data - other._data)
 
     def __mul__(self, other: Union["_BaseMatrix", Number]) -> "_BaseMatrix":
         if isinstance(other, _BaseMatrix):
-            return self.__class__(self._data @ other._data)
+            return self._wrap(self._data @ other._data)
         else:
-            return self.__class__(self._data * other)
+            return self._wrap(self._data * other)
 
     def __rmul__(self, scalar: Number) -> "_BaseMatrix":
-        return self.__class__(scalar * self._data)
+        return self._wrap(scalar * self._data)
 
     # indexing helpers (row, col)
     def __getitem__(self, idx: Tuple[int, int]):

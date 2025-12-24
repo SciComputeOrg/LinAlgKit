@@ -8,11 +8,26 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "LinAlgKit"
 version = "0.1.0"
-description = "A C++/Python linear algebra toolkit with pybind11 bindings"
+description = "A lightweight, NumPy-powered linear algebra toolkit for Python with a clean matrix API"
 readme = "README.md"
 authors = [{ name = "LinAlgKit Developers" }]
 license = { file = "LICENSE" }
 requires-python = ">=3.8"
+keywords = ["linear-algebra", "matrix", "numpy", "scientific-computing", "math"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: Apache Software License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering :: Mathematics",
+]
 dependencies = [
   "numpy>=1.22",
 ]
@@ -20,6 +35,7 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/SciComputeOrg/LinAlgKit"
 Repository = "https://github.com/SciComputeOrg/LinAlgKit"
+Documentation = "https://github.com/SciComputeOrg/LinAlgKit#readme"
 
 [tool.setuptools]
 package-dir = {"" = "python_pkg"}

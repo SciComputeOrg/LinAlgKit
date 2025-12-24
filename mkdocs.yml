@@ -1,5 +1,5 @@
 site_name: LinAlgKit Docs
-site_description: Documentation for the LinAlgKit C++/Python linear algebra toolkit
+site_description: Python-first deep learning library with autograd, neural networks, and Numba JIT acceleration
 repo_url: https://github.com/SciComputeOrg/LinAlgKit
 repo_name: SciComputeOrg/LinAlgKit
 site_url: https://SciComputeOrg.github.io/LinAlgKit/
@@ -15,6 +15,7 @@ theme:
 nav:
   - Home: index.md
   - Getting Started: tutorial.md
+  - Autograd & NN: autograd.md
   - API Reference: api.md
   - Deep Learning: deep_learning.md
   - Performance: performance.md

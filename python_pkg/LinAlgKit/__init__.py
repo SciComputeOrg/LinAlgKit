@@ -1,16 +1,34 @@
 """
-LinAlgKit — Comprehensive Python-first linear algebra and deep learning math library.
+LinAlgKit — Comprehensive Python-first linear algebra and deep learning library.
 
-Pure-Python + NumPy implementation for easy installs and a clean API.
-Includes matrices, decompositions, activation functions, loss functions, and more.
+Features:
+- Automatic differentiation (autograd)
+- Neural network modules (nn.Module, nn.Linear, etc.)
+- Optimizers (SGD, Adam, AdamW)
+- High-performance Numba JIT acceleration
 
-For high-performance operations, use the `fast` submodule which provides Numba JIT-compiled
-functions that can be 10-50x faster than the standard implementations.
+For autograd:
+    from LinAlgKit import Tensor, nn, optim
+    
+    x = Tensor([1.0, 2.0], requires_grad=True)
+    y = x * 2 + 1
+    y.sum().backward()
+    print(x.grad)  # [2.0, 2.0]
 """
 
 # Import fast module for HAS_NUMBA flag
 from . import fast as _fast
 HAS_NUMBA = _fast.HAS_NUMBA
+
+# Autograd Tensor
+from .tensor import (
+    Tensor, tensor, zeros as tensor_zeros, ones as tensor_ones,
+    randn, rand, from_numpy, mse_loss as tensor_mse_loss, cross_entropy_loss as tensor_cross_entropy,
+)
+
+# Neural Network modules
+from . import nn
+from . import optim
 
 from .pylib import (
     # Matrix Classes

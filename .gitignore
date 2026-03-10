@@ -68,3 +68,6 @@ googletest-*
 
 # Google Benchmark generated files
 benchmark-*
+
+# MkDocs build output
+site/
